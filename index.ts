@@ -21,13 +21,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // simple route
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to Pollossss application." });
+app.get("/", (req:any, res:any) => {
+    res.json({ message: "Welcome to Music Rest application." });
   });
 
-  const PORT = process.env.PORT || 9999;
-  console.log(PORT)
+//add routng
+require('./app/routes/auth.routes')(app);
+require('./app/routes/user.routes')(app);
+require('./app/routes/data.routes')(app);
+
+ const PORT = process.env.PORT || 9999;
+ 
 app.listen(PORT, () => {
+  
     
     ()=>{console.log('adad')}
     console.log('The application is listening on port 9999!');

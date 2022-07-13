@@ -2,5 +2,5 @@
 //https://www.freecodecamp.org/news/build-a-restful-api-using-node-express-and-mongodb/
 //https://www.typescripttutorial.net/typescript-tutorial/nodejs-typescript/
 
-
+creata struttura
 npm start
