@@ -3,7 +3,7 @@ Rest service for Music App.
 This app
 
 To install just download the app.
-Configure a ** .env ** file with this configuration
+Configure a  **.env **  file with this configuration
 
 PORT=
 EXPIRES=
