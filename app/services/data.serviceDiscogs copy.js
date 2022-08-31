@@ -41,7 +41,7 @@ const TrackAdpt = __importStar(require("./lib/core/class/Track"));
 class DataServiceDiscogs extends Service_1.DataServiceAbstract {
     constructor() {
         super(Call.axiosRequestDS);
-        this.token = '&token=' + process.env.API_TOKEN_DISCOGS;
+        this.token = '&token=AewajmAUAVgBcbOuIgjuNDzfcRcQihTkwloznSNf';
         this.getSearch = (q, tos) => __awaiter(this, void 0, void 0, function* () {
             return yield this.axiosService.get(`database/search?q=${q}&type=${options_1.typeOfSeachDiscogs[tos]}${this.token} `).then(response => {
                 switch (tos) {

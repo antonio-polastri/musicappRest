@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LyricsAbstractClass = exports.TrackDetailAbstractClass = exports.TrackAbstractClass = exports.ArtistAbstractClass = exports.AlbumAbstractClass = void 0;
+exports.EventAbstractClass = exports.LyricsAbstractClass = exports.TrackDetailAbstractClass = exports.TrackAbstractClass = exports.ArtistAbstractClass = exports.AlbumAbstractClass = void 0;
 /**  Concrete class for album */
 class AlbumAbstractClass {
     constructor(json, artistid) {
@@ -41,3 +41,10 @@ class LyricsAbstractClass {
     }
 }
 exports.LyricsAbstractClass = LyricsAbstractClass;
+class EventAbstractClass {
+    constructor(json) {
+        this.show = true;
+        this.initial(json);
+    }
+}
+exports.EventAbstractClass = EventAbstractClass;

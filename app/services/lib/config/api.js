@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.axiosRequestLastFM = exports.axiosRequestMusix = exports.axiosRequestDeezer = exports.axiosRequestDS = exports.axiosWiki = exports.axiosLyrics = exports.axiosRequestMB = exports.axiosRequestItunes = void 0;
+exports.axiosRequestHotelBeds = exports.axiosRequestPredictHQ = exports.axiosRequestLastFM = exports.axiosRequestMusix = exports.axiosRequestDeezer = exports.axiosRequestDS = exports.axiosWiki = exports.axiosLyrics = exports.axiosRequestMB = exports.axiosRequestItunes = void 0;
 const axios_1 = __importDefault(require("axios"));
 //https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
 exports.axiosRequestItunes = axios_1.default.create({
@@ -70,3 +70,21 @@ exports.axiosRequestLastFM = axios_1.default.create({
       'User-Agent' : 'MyMusicaap/1.0 +http://localhost'
       }*/
 });
+exports.axiosRequestPredictHQ = axios_1.default.create({
+    baseURL: "https://api.predicthq.com/v1/events/",
+    /*headers: {
+      Accept : 'application/json',
+      'User-Agent' : 'MyMusicaap/1.0 +http://localhost'
+      }*/
+});
+exports.axiosRequestHotelBeds = axios_1.default.create({
+    baseURL: "https://api.test.hotelbeds.com/hotel-api/1.0/",
+    /*headers: {
+      Accept : 'application/json',
+      'User-Agent' : 'MyMusicaap/1.0 +http://localhost'
+      }*/
+});
+/*headers={
+  "Authorization": "Bearer $ACCESS_TOKEN",
+  "Accept": "application/json"
+},*/ 

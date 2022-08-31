@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-export type Origin  = "discogs" | "deezer" | "musicbrainz" | "itunes" | "lyricsovh" |"musixmatch"; 
+export type Origin  = "discogs" | "deezer" | "musicbrainz" | "itunes" | "lyricsovh" |"musixmatch"  | "lastfm" |"predicthq"; 
 
 
 export interface Track{
@@ -94,6 +94,25 @@ export interface Album{
     show : boolean;
     
 }
+export interface Event{
+
+    title : string;
+    category : string;
+    start: Date;
+    end :Date;
+    location : number[];
+    country : string;
+    id : string;
+    origin : Origin;
+    entities : {};
+    timezone : string;
+    
+   
+
+}
+
+
+
 /**  Concrete class for album */
 export abstract class AlbumAbstractClass implements Album{
 
@@ -230,4 +249,26 @@ export abstract class LyricsAbstractClass implements Lyrics{
   
     protected abstract initial(json : object):void;
 
+}
+
+export abstract class EventAbstractClass implements Event{
+
+    title!: string;
+    category!: string;
+    start!: Date;
+    end!: Date;
+    location!: number[];
+    country!: string;
+    id!: string;
+    origin!: Origin;
+    entities!: {};
+    timezone!: string;
+    show:boolean = true;
+
+    
+    constructor(json : object){
+        this.initial(json);
+    }
+  
+    protected abstract initial(json : object):void;
 }

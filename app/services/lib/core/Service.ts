@@ -12,13 +12,18 @@ export interface DataService{
     getTracks(albumId :string ) :Promise<Track[]>;
     getTrack(trackId : string):Promise<TrackDetail>;
     getBio(artistId : string):any;
+    getConcerts(artistId : string):any;
 
 }
  
 export abstract class DataServiceAbstract implements DataService{
     
     protected token:string | undefined;
+    protected aoikey:string | undefined;
+    protected signature:string | undefined;
+    
     constructor( protected axiosService: AxiosInstance){}
+    
      
     abstract getSearch(q: string, tos: string) : any
     abstract getArtist(q: string): Promise<Artist[]>  
@@ -28,7 +33,13 @@ export abstract class DataServiceAbstract implements DataService{
     getBio(artistId: string) {
         throw new Error("Method not implemented.");
     }
- 
+    getConcerts(artistId: string) {
+        throw new Error("Method not implemented.");
+    }
+    getHotels(artistId: string) {
+        throw new Error("Method not implemented.");
+    }
+    
 }
 
 class operationOnService extends DataServiceAbstract{

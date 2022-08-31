@@ -37,7 +37,8 @@ class MongoDs {
         };
         this.getSearch = (q, type) => __awaiter(this, void 0, void 0, function* () {
             let rs = '';
-            rs = yield mongo_1.searchModel.find({ query: q, searchType: type });
+            console.log("getSearch+++++++++++" + q + " : " + type);
+            rs = yield mongo_1.searchModel.find({ query: q, searchType: { $regex: new RegExp(type, 'i') } });
             return rs;
         });
         this.getData = (q, type) => __awaiter(this, void 0, void 0, function* () {
@@ -45,7 +46,8 @@ class MongoDs {
             if (type == 'artist') {
                 console.log("getdata+++++++++++" + q + " : " + type);
                 //https://stackoverflow.com/questions/1863399/mongodb-is-it-possible-to-make-a-case-insensitive-query
-                rs = yield mongo_1.artistModel.find({ name: { $regex: new RegExp('^' + q, 'i') } });
+                let re = '';
+                rs = yield mongo_1.artistModel.find({ name: { $regex: new RegExp(q, 'i') } });
                 console.log("getdata+++++++++++" + rs);
                 return rs;
             }

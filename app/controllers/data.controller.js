@@ -19,8 +19,11 @@ const data_serviceDiscogs_1 = __importDefault(require("../services/data.serviceD
 const data_serviceMusicbrainz_1 = __importDefault(require("../services/data.serviceMusicbrainz"));
 const data_serviceLyrics_1 = __importDefault(require("../services/data.serviceLyrics"));
 const data_serviceMusicxMatch_1 = __importDefault(require("../services/data.serviceMusicxMatch"));
+const data_serviceLastFM_1 = __importDefault(require("../services/data.serviceLastFM"));
+const data_servicePredictHQ_1 = __importDefault(require("../services/data.servicePredictHQ"));
 const console_1 = __importDefault(require("console"));
 const mongoDs_1 = require("../datasources/mongoDs");
+const data_serviceHotelBed_1 = __importDefault(require("../services/data.serviceHotelBed"));
 //Import the mongoose module
 const { Timestamp } = require('bson');
 //open connection to db
@@ -28,21 +31,31 @@ let mds = new mongoDs_1.MongoDs();
 exports.search = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let q = req.query.q;
     let st = req.query.st;
-    let rs = {};
+    let rs = [];
     //check is id already present this kind of research
     mds.getSearch(q, st).then(function (result) {
         return __awaiter(this, void 0, void 0, function* () {
             if (result[0]) {
                 console_1.default.log("getdata" + result[0]);
                 rs = yield mds.getData(q, st).then((response) => response).catch();
-                console_1.default.log("getdata FROM MONGO++++++++++++++++++++++++++++++++++++++++++++++++" + rs.lenght);
+                console_1.default.log("getdata FROM MONGO++++++++++++++++++++++++++++++++++++++++++++++++" + rs);
             }
             else {
                 rs = (yield new serviceWrapper_1.ServiceWrapper(data_serviceDiscogs_1.default).getSearch(q, st).then((response) => response).catch())
-                    .concat(yield new serviceWrapper_1.ServiceWrapper(data_serviceDeezer_1.default).getSearch(q, st).then((response) => response).catch());
-                // .concat(await new ServiceWrapper(DataServiceMusicbrainz).getSearch(q,st).then((response: any)=>response).catch())
+                    .concat(yield new serviceWrapper_1.ServiceWrapper(data_serviceDeezer_1.default).getSearch(q, st).then((response) => response).catch())
+                    .concat(yield new serviceWrapper_1.ServiceWrapper(data_serviceMusicbrainz_1.default).getSearch(q, st).then((response) => response).catch());
+                //alph ordination	 
+                rs = rs.sort((a, b) => {
+                    let fn = a.name.toLowerCase();
+                    ;
+                    let sn = b.name.toLowerCase();
+                    ;
+                    return fn < sn ? -1 : fn > sn ? 1 : 0;
+                });
                 console_1.default.log("getdata FROM RESOURCE*************************************" + rs.lenght);
                 mds.insertSearch(q, rs, st);
+                //and insert data inside at artist??
+                mds.insertArtist(rs);
             }
             yield res.status(200).send(JSON.stringify(rs));
         });
@@ -81,6 +94,11 @@ exports.trackdetail = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     let resultset = yield new serviceWrapper_1.ServiceWrapper(data_serviceDeezer_1.default).getTrack(id).then(response => { return response; }).catch();
     res.status(200).send(JSON.stringify(resultset));
 });
+exports.bio = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let artist = req.query.artist;
+    let resultset = yield new serviceWrapper_1.ServiceWrapper(data_serviceLastFM_1.default).getBio(artist).then(response => { return response; }).catch();
+    res.status(200).send(JSON.stringify(resultset));
+});
 exports.lyric = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let artist = req.query.artist;
     let title = req.query.title;
@@ -92,12 +110,29 @@ exports.lyric = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let lyric = (yield data_serviceLyrics_1.default.getLyrics(artist, title).then(response => { return response; }).catch(() => {
         "No lyrics found";
     }));
-    if (lyric.lyric && lyric.lyric.indexOf("testo non ") !== -1)
+    console_1.default.log("LYTICS ***** " + lyric.lyric);
+    if (lyric.lyric && lyric.lyric.indexOf("testo non ") !== -1) {
         lyric = (yield data_serviceMusicxMatch_1.default.getTrackFromLists(artist, title).then(response => {
+            console_1.default.log("response. *****   " + response);
             return { 'lyric': response.split("*******")[0] };
-        })
-            .catch(() => {
+        }).catch(() => {
             "No lyrics found";
         }));
-    res.status(200).send(JSON.stringify(lyric));
+        console_1.default.log("LYTICS ***** 4+ " + (lyric === null || lyric === void 0 ? void 0 : lyric.lyric));
+        res.status(200).send(JSON.stringify({ 'lyric': "We are sorry ! Lyrics Not present!" }));
+    }
+    else {
+        console_1.default.log("LYTICS ***** 5");
+        res.status(200).send(JSON.stringify(lyric));
+    }
+});
+exports.concerts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let artist = req.query.artist;
+    let resultset = yield new serviceWrapper_1.ServiceWrapper(data_servicePredictHQ_1.default).getConcerts(artist).then((response) => { return response; }).catch();
+    res.status(200).send(JSON.stringify(resultset));
+});
+exports.hotels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let artist = req.query.artist;
+    let resultset = yield new serviceWrapper_1.ServiceWrapper(data_serviceHotelBed_1.default).getHotels(artist).then((response) => { return response; }).catch();
+    res.status(200).send(JSON.stringify(resultset));
 });

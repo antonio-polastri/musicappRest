@@ -51,10 +51,7 @@ const searchSchema = new Schema(
 });
 
 albumSchema.index({id: 1, origin: 1}, {unique: true});
- 
-
-
-
+   
 const trackSchema = new Schema<Track>({
 
     name: { type: String, required: true },

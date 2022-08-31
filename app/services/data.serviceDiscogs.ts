@@ -11,7 +11,7 @@ import { AxiosInstance } from 'axios';
 
 class DataServiceDiscogs extends DataServiceAbstract{
    
-     token = '&token=AewajmAUAVgBcbOuIgjuNDzfcRcQihTkwloznSNf';
+     token = '&token='+process.env.API_TOKEN_DISCOGS;
 
     constructor(){
        

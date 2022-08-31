@@ -7,6 +7,7 @@ import { Album, Artist, Origin, Track, TrackDetail } from '../musicObject';
 import {DataService} from '../Service';
 /* DI of services */
 export class ServiceWrapper implements DataService{
+		
 
         private service : DataService;
 
@@ -57,5 +58,15 @@ export class ServiceWrapper implements DataService{
             return this.service.getBio(artistId);
 
         }
-}
+        getConcerts(artist:string){
 
+            return this.service.getConcerts(artist);
+
+        }
+    
+        getHotels(artist: any) {
+            return this.service.getHotels(artist);
+		}
+		 
+    
+    }

@@ -8,6 +8,12 @@ class DataServiceAbstract {
     getBio(artistId) {
         throw new Error("Method not implemented.");
     }
+    getConcerts(artistId) {
+        throw new Error("Method not implemented.");
+    }
+    getHotels(artistId) {
+        throw new Error("Method not implemented.");
+    }
 }
 exports.DataServiceAbstract = DataServiceAbstract;
 class operationOnService extends DataServiceAbstract {

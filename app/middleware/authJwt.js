@@ -6,7 +6,7 @@ const User = db.user;
 verifyToken = (req, res, next) => {
   
   let token = req.headers["x-access-token"];
-  console.log(token);
+  // console.log(token+': TOKEN *********************');
   if (!token) {
     return res.status(403).send({
       message: "No token provided!"
@@ -14,7 +14,7 @@ verifyToken = (req, res, next) => {
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
-    console.log(decoded);
+   // console.log(decoded);
     if (err) {
       return res.status(401).send({
         message: "Unauthorized!"
@@ -42,24 +42,7 @@ isAdmin = (req, res, next) => {
     });
   });
 };
-//for installation of device
-isDeviceInstaller = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admdevicein") {
-          next();
-          return;
-        }
-      }
-
-      res.status(403).send({
-        message: "Require Device Installer Role!"
-      });
-      return;
-    });
-  });
-};
+ 
 
 
 isModerator = (req, res, next) => {

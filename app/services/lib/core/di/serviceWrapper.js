@@ -28,5 +28,11 @@ class ServiceWrapper {
     getBio(artistId) {
         return this.service.getBio(artistId);
     }
+    getConcerts(artist) {
+        return this.service.getConcerts(artist);
+    }
+    getHotels(artist) {
+        return this.service.getHotels(artist);
+    }
 }
 exports.ServiceWrapper = ServiceWrapper;

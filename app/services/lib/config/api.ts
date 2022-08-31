@@ -74,3 +74,22 @@ export const axiosRequestLastFM = axios.create({
     'User-Agent' : 'MyMusicaap/1.0 +http://localhost'
     }*/
 });
+
+export const axiosRequestPredictHQ = axios.create({
+  baseURL: "https://api.predicthq.com/v1/events/",
+  /*headers: {
+    Accept : 'application/json',
+    'User-Agent' : 'MyMusicaap/1.0 +http://localhost'
+    }*/
+});
+export const axiosRequestHotelBeds = axios.create({
+  baseURL: "https://api.test.hotelbeds.com/hotel-api/1.0/",
+  /*headers: {
+    Accept : 'application/json',
+    'User-Agent' : 'MyMusicaap/1.0 +http://localhost'
+    }*/
+});
+/*headers={
+  "Authorization": "Bearer $ACCESS_TOKEN",
+  "Accept": "application/json"
+},*/

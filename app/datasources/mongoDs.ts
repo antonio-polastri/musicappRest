@@ -78,7 +78,8 @@ export class MongoDs{
     getSearch =  async (q:string,type : string) =>{
          
        let rs: any = '';
-        rs = await searchModel.find({query : q,searchType : type} );
+       console.log("getSearch+++++++++++"+q+" : "+type)
+        rs = await searchModel.find({query : q,searchType :{$regex: new RegExp(type, 'i')} } );
        
         return rs;
     }
@@ -89,7 +90,8 @@ export class MongoDs{
             
             console.log("getdata+++++++++++"+q+" : "+type)
 //https://stackoverflow.com/questions/1863399/mongodb-is-it-possible-to-make-a-case-insensitive-query
-              rs = await artistModel.find({name : {$regex: new RegExp('^' + q, 'i')}} ); 
+            let re = ''
+            rs = await artistModel.find({name : {$regex: new RegExp(q, 'i')}} ); 
             console.log("getdata+++++++++++"+rs)
               return rs;
             }

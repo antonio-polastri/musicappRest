@@ -36,82 +36,82 @@ const Call = __importStar(require("./lib/config/api"));
 const options_1 = require("./lib/config/options");
 const AlbumAdpt = __importStar(require("./lib/core/class/Album"));
 const ArtistAdpt = __importStar(require("./lib/core/class/Artist"));
-const Service_1 = require("./lib/core/Service");
 const TrackAdpt = __importStar(require("./lib/core/class/Track"));
-class DataServiceDiscogs extends Service_1.DataServiceAbstract {
+const TrackDetailsAdpt = __importStar(require("./lib/core/class/TrackDetailsAdpt"));
+const Service_1 = require("./lib/core/Service");
+const Album_1 = require("./lib/core/class/Album");
+class DataServiceDeezer extends Service_1.DataServiceAbstract {
     constructor() {
-        super(Call.axiosRequestDS);
-        this.token = '&token=' + process.env.API_TOKEN_DISCOGS;
+        super(Call.axiosRequestDeezer);
         this.getSearch = (q, tos) => __awaiter(this, void 0, void 0, function* () {
-            return yield this.axiosService.get(`database/search?q=${q}&type=${options_1.typeOfSeachDiscogs[tos]}${this.token} `).then(response => {
+            return yield this.axiosService.get(`/search/${options_1.typeOfSeachDez[tos]}/?q="${q}"&output=json`).then(response => {
                 switch (tos) {
                     case 'artist':
-                        var returnedValue = [];
-                        response.data.results.forEach((element) => {
-                            if (element.type == 'artist')
-                                returnedValue.push(new ArtistAdpt.ArtistDiscogs(element));
+                        let returnedValue = [];
+                        response.data.data.forEach((element) => {
+                            returnedValue.push(new ArtistAdpt.ArtistDeezer(element));
                         });
                         return returnedValue;
                     case 'track':
                         let returnedValuet = [];
-                        // console.log(response.data)
-                        response.data.results.forEach((element) => {
-                            returnedValuet.push(new TrackAdpt.TrackDiscogs(element, response.data));
+                        let i = 0;
+                        response.data.data.forEach((track) => {
+                            i++;
+                            returnedValuet.push(new TrackAdpt.TrackDeezer(track, i));
                         });
                         return returnedValuet;
                     case 'album':
                         let returnedValuea = [];
-                        response.data.results.forEach((element) => {
-                            console.log(element);
-                            if (element.type == 'release')
-                                returnedValuea.push(new AlbumAdpt.AlbumDiscogs(element));
+                        response.data.data.forEach((element) => {
+                            returnedValuea.push(new AlbumAdpt.AlbumDeezer(element));
                         });
                         return returnedValuea;
                 }
             });
         });
         this.getArtist = (q) => __awaiter(this, void 0, void 0, function* () {
-            let searcStr = `database/search?q=${q}&type=artist${this.token}`;
-            return yield this.axiosService
-                .get(searcStr)
-                .then(response => {
+            return yield this.axiosService.get(`/search/artist/?q=${q}&output=json`).then(response => {
                 var returnedValue = [];
-                response.data.results.forEach((element) => {
-                    returnedValue.push(new ArtistAdpt.ArtistDiscogs(element));
+                response.data.data.forEach((element) => {
+                    returnedValue.push(new ArtistAdpt.ArtistDeezer(element));
                 });
                 return returnedValue;
             });
         });
-        this.getAlbums = (artistid) => __awaiter(this, void 0, void 0, function* () {
-            let searcStr = `/artists/${artistid}/releases?page=1&per_page=400&sort=year&sort_order=asc`;
-            //resolve pagination problems
-            return yield this.axiosService
-                .get(searcStr)
-                .then(response => {
-                let returnedValue = [];
-                response.data.releases.forEach((element) => {
-                    returnedValue.push(new AlbumAdpt.AlbumDiscogs(element, artistid));
+        this.getAlbums = (artistID) => __awaiter(this, void 0, void 0, function* () {
+            //the solutions is a proxy server tht repay the request
+            return yield this.axiosService.get(`/artist/${artistID}/albums`).then(response => {
+                // console.log(response.data)
+                var returnedValue = [];
+                response.data.data.forEach((element) => {
+                    returnedValue.push(new Album_1.AlbumDeezer(element, artistID));
                 });
                 return returnedValue;
             });
         });
-        this.getTracks = (releaseId) => __awaiter(this, void 0, void 0, function* () {
-            let searcStr = `/releases/${releaseId}`;
-            return yield this.axiosService.get(searcStr).then(response => {
+        this.getTracks = (albumId) => __awaiter(this, void 0, void 0, function* () {
+            return yield this.axiosService.get(`/album/${albumId}`).then(response => {
                 let returnedValue = [];
-                response.data.tracklist.forEach((element) => {
-                    returnedValue.push(new TrackAdpt.TrackDiscogs(element, response.data));
+                let i = 0;
+                response.data.tracks.data.forEach((track) => {
+                    i++;
+                    returnedValue.push(new TrackAdpt.TrackDeezer(track, i));
                 });
+                // console.log(returnedValue);
                 return returnedValue;
+            });
+        });
+        //get single track data, specific for deezen
+        this.getTrack = (trackId) => __awaiter(this, void 0, void 0, function* () {
+            return yield this.axiosService.get(`/track/${trackId}`).then((response) => {
+                let a = new TrackDetailsAdpt.TrackDetailDeezer(response.data);
+                console.log(a);
+                return a;
             });
         });
         this.getBio = (artistId) => __awaiter(this, void 0, void 0, function* () {
-            let searcStr = `/artists/${artistId}`;
-            return yield this.axiosService.get(searcStr).then(response => response.data);
+            return null; //await this.axiosService.get(`/artists/${artistId}`).then(response => response.data);
         });
     }
-    getTrack(trackId) {
-        throw new Error('Method not implemented.');
-    }
 }
-exports.default = new DataServiceDiscogs();
+exports.default = new DataServiceDeezer();
