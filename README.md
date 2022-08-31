@@ -6,8 +6,11 @@ To install just download the app.
 Configure a  **.env **  file with this configuration
 
 PORT=
+
 EXPIRES=
+
 EXPIRES_TOKEN=
+
 
 API_TOKEN_DISCOGS=
 API_TOKEN_DEEZER=
